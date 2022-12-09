@@ -1,6 +1,5 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
-import { createReadStream, readFileSync, readFile, writeFile } from 'fs';
-import { TODOS } from './data';
+import { Injectable } from '@nestjs/common';
+import { readFileSync, writeFile } from 'fs';
 import { join } from 'path';
 import { Todo } from './interface/todo.interface';
 
@@ -99,6 +98,24 @@ export class AppService {
       };
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  completeTodo(id) {
+    try {
+      const fileContent = this.getFileContent();
+      const completeTodoIndex = fileContent.findIndex(
+        (todo) => todo.id.toString() === id.toString(),
+      );
+      fileContent[completeTodoIndex] = {
+        ...fileContent[completeTodoIndex],
+        status: 'done',
+      };
+      writeFile(FILE_DIR, JSON.stringify(fileContent), function writeJSON(err) {
+        if (err) return console.log(err);
+      });
+    } catch (err) {
+      console.log('err:', err);
     }
   }
 }

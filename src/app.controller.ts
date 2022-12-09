@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -35,5 +36,11 @@ export class AppController {
   editTodo(@Body() body, @Param() params) {
     console.log('params:', params);
     return this.appService.editTodo(body, params.id);
+  }
+
+  @Patch('/todo/:id')
+  completeTdo(@Param('id') id) {
+    console.log('id:', id);
+    return this.appService.completeTodo(id);
   }
 }
